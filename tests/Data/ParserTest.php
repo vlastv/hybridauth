@@ -72,4 +72,18 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($result, $object);
     }
+
+    public function test_parse_birthday()
+    {
+        $parser = new Parser();
+
+        // Facebook birthday formats
+        $this->assertEquals(['2006', '02', '01'], $parser->parseBirthday('02/01/2006'));
+        $this->assertEquals(['2006', null, null], $parser->parseBirthday('2006'));
+        $this->assertEquals([null, '02', '01'], $parser->parseBirthday('02/01'));
+
+        // Vkontakte birthday formats
+        $this->assertEquals(['2006', '02', '01'], $parser->parseBirthday('01.02.2006', '.', false));
+        $this->assertEquals([null, '02', '01'], $parser->parseBirthday('01.02', '.', false));
+    }
 }

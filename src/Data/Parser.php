@@ -72,13 +72,26 @@ final class Parser
         return $result;
     }
 
-    /**
-    * needs to be improved
-    */
-    public function parseBirthday($birthday, $seperator)
+    public function parseBirthday($birthday, $separator = '/', $monthFirst = true)
     {
-        $birthday = date_parse($birthday);
+        if (empty($birthday)) {
+            return [null, null, null];
+        }
 
-        return [ $birthday['year'], $birthday['month'], $birthday['day'] ];
+        $components = explode($separator, $birthday);
+
+        $count = count($components);
+
+        $components += [null, null, null];
+
+        if ($count === 1) {
+            return $components;
+        }
+
+        if ($monthFirst && $count >= 2) {
+            list($components[0], $components[1]) = [$components[1], $components[0]];
+        }
+
+        return array_reverse($components);
     }
 }
